@@ -13,6 +13,6 @@ jobs:
       - name: Update diagram
         uses: githubocto/repo-visualizer@main
         with:
-          excluded_paths: "ignore,.github,.idea,source,src,DOCS"
+          excluded_paths: "ignore,.github,.idea,source,DOCS"
           max_depth: 3
           excluded_globs: "**/*.{1,2}"
