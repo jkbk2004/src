@@ -1,0 +1,1902 @@
+<?xml version="1.0"?>
+
+<entry_id version="2.0">
+
+<!-- =========================== -->
+<!-- HYCOM -->
+<!-- =========================== -->
+
+<entry id="title1">
+  <type>char(80)</type>
+  <group>freeform_a_000</group>
+  <desc>first line for describing the simulation</desc>
+  <values>
+    <value>0.5a NAVGEM wind, thermal, precip 3-hrly forcing ; LWcorr; GDEM42 SSS relax;</value>
+  </values>
+</entry>
+
+<entry id="title2">
+  <type>char(80)</type>
+  <group>freeform_a_001</group>
+  <desc>second line for describing the simulation</desc>
+  <values>
+    <value>17T Sigma2*; GDEM4 Jan init; KPP; SeaWiFS KPAR; HYCOM+CICE; A=20;Smag=.05;</value>
+  </values>
+</entry>
+
+<entry id="title3">
+  <type>char(80)</type>
+  <group>freeform_a_002</group>
+  <desc>third line for describing the simulation</desc>
+  <values>
+    <value>Z(7):1-7,Z(16):8,Z(2):10-16,Z(13):dp00/f/x=36/1.18/262;Z(3):400-600m; NOGAPSsnow</value>
+  </values>
+</entry>
+
+<entry id="title4">
+  <type>char(80)</type>
+  <group>freeform_a_003</group>
+  <desc>forth line for describing the simulation</desc>
+  <values>
+    <value>sigma:84-14m; depth_GLBb0.08_11; apply offlux to CICE; 2.2.86C2p0i-sm-sse-900d</value>
+  </values>
+</entry>
+
+<entry id="iversn">
+  <type>integer</type>
+  <group>freeform_b_000</group>
+  <desc>hycom version number x10</desc>
+  <values>
+    <value>23</value>
+  </values>
+</entry>
+
+<entry id="iexpt">
+  <type>integer</type>
+  <group>freeform_b_001</group>
+  <desc>experiment number x10</desc>
+  <values>
+    <value>924</value>
+  </values>
+</entry>
+
+<entry id="idm">
+  <type>integer</type>
+  <group>freeform_b_002</group>
+  <desc>longitudinal array size</desc>
+  <values>
+    <value>1135</value>
+  </values>
+</entry>
+
+<entry id="jdm">
+  <type>integer</type>
+  <group>freeform_b_003</group>
+  <desc>latitudinal array size</desc>
+  <values>
+    <value>633</value>
+  </values>
+</entry>
+
+<entry id="itest">
+  <type>integer</type>
+  <group>freeform_b_004</group>
+  <desc>grid point where detailed diagnostics are desired</desc>
+  <values>
+    <value>131</value>
+  </values>
+</entry>
+
+<entry id="jtest">
+  <type>integer</type>
+  <group>freeform_b_005</group>
+  <desc>grid point where detailed diagnostics are desired</desc>
+  <values>
+    <value>315</value>
+  </values>
+</entry>
+
+<entry id="kdm">
+  <type>integer</type>
+  <group>freeform_b_006</group>
+  <desc>number of layers</desc>
+  <values>
+    <value>41</value>
+  </values>
+</entry>
+
+<entry id="nhybrd">
+  <type>integer</type>
+  <group>freeform_b_007</group>
+  <desc>number of hybrid levels (0 all isopycnal)</desc>
+  <values>
+    <value>41</value>
+  </values>
+</entry>
+
+<entry id="nsigma">
+  <type>integer</type>
+  <group>freeform_b_008</group>
+  <desc>number of sigma levels (nhybrd-nsigma z-levels)</desc>
+  <values>
+    <value>14</value>
+  </values>
+</entry>
+
+<entry id="dp00">
+  <type>real</type>
+  <group>freeform_b_009_a</group>
+  <desc>deep z-level spacing minimum thickness (m)</desc>
+  <values>
+    <value>1.0</value>
+  </values>
+</entry>
+
+<entry id="dp00x">
+  <type>real</type>
+  <group>freeform_b_009_b</group>
+  <desc>deep z-level spacing maximum thickness (m)</desc>
+  <values>
+    <value>1.0</value>
+  </values>
+</entry>
+
+<entry id="dp00f">
+  <type>real</type>
+  <group>freeform_b_009_c</group>
+  <desc>deep z-level spacing stretching factor (1.0=const.space)</desc>
+  <values>
+    <value>1.0</value>
+  </values>
+</entry>
+
+<entry id="ds00">
+  <type>real</type>
+  <group>freeform_b_009_d</group>
+  <desc>shallow z-level spacing minimum thickness (m)</desc>
+  <values>
+    <value>1.0</value>
+  </values>
+</entry>
+
+<entry id="ds00x">
+  <type>real</type>
+  <group>freeform_b_009_e</group>
+  <desc>shallow z-level spacing maximum thickness (m)</desc>
+  <values>
+    <value>1.0</value>
+  </values>
+</entry>
+
+<entry id="ds00f">
+  <type>real</type>
+  <group>freeform_b_009_f</group>
+  <desc>shallow z-level spacing stretching factor (1.0=const.space)</desc>
+  <values>
+    <value>1.0</value>
+  </values>
+</entry>
+
+<entry id="dp0k">
+  <type>real(1000)</type>
+  <group>freeform_b_009_g</group>
+  <desc>deep    z-level spacing minimum thickness (m)</desc>
+  <values>
+    <value>1.00,1.80,3.24,4.68,4.93,5.81,6.87,16*8.00,10.00,16.40,35.92,42.38,50.02,59.02,69.64,82.18,96.97,114.43,135.02,159.33,188.01,221.84,261.78,400.00,600.00,600.00</value>
+  </values>
+</entry>
+
+<entry id="ds0k">
+  <type>real(1000)</type>
+  <group>freeform_b_010</group>
+  <desc>shallow z-level spacing minimum thickness (m)</desc>
+  <values>
+    <value>14*1.00</value>
+  </values>
+</entry>
+
+<entry id="dp00i">
+  <type>real</type>
+  <group>freeform_b_011</group>
+  <desc>deep iso-pycnal spacing minimum thickness (m)</desc>
+  <values>
+    <value>1.0</value>
+  </values>
+</entry>
+
+<entry id="isotop">
+  <type>real</type>
+  <group>freeform_b_012</group>
+  <desc>shallowest depth for isopycnal layers (m), &lt;0 from file</desc>
+  <values>
+    <value>83.0</value>
+  </values>
+</entry>
+
+<entry id="oneta0">
+  <type>real</type>
+  <group>freeform_b_013</group>
+  <desc>minimum 1+eta, must be &gt; 0.0</desc>
+  <values>
+    <value>0.1</value>
+  </values>
+</entry>
+
+<entry id="saln0">
+  <type>real</type>
+  <group>freeform_b_014</group>
+  <desc>initial salinity value (psu), only used for iniflg&lt;2</desc>
+  <values>
+    <value>35.0</value>
+  </values>
+</entry>
+
+<entry id="locsig">
+  <type>logical</type>
+  <group>freeform_b_015</group>
+  <desc>locally-referenced pot. density for stability (0 F,1 T)</desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="kapref">
+  <type>integer</type>
+  <group>freeform_b_016</group>
+  <desc>thermobaric ref. state (-1 input,0 none,1,2,3 constant)</desc>
+  <values>
+    <value>-1</value>
+  </values>
+</entry>
+
+<entry id="thflag">
+  <type>integer</type>
+  <group>freeform_b_017</group>
+  <desc>reference pressure flag (0 Sigma-0, 2 Sigma-2)</desc>
+  <values>
+    <value>2</value>
+  </values>
+</entry>
+
+<entry id="thbase">
+  <type>real</type>
+  <group>freeform_b_018</group>
+  <desc>reference density (sigma units)</desc>
+  <values>
+    <value>34.0</value>
+  </values>
+</entry>
+
+<entry id="vsigma">
+  <type>logical</type>
+  <group>freeform_b_019</group>
+  <desc>spacially varying isopycnal target densities (0 F,1 T)</desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="sigma">
+  <type>real(1000)</type>
+  <group>freeform_b_020</group>
+  <desc>isopycnal target density (sigma units)</desc>
+  <values>
+    <value>17.00,18.00,19.00,20.00,21.00,22.00,23.00,24.00,25.00,26.00,27.00,28.00,29.00,29.90,30.65,31.35,31.95,32.55,33.15,33.75,34.30,34.80,35.20,35.50,35.80,36.04,36.20,36.38,36.52,36.62,36.70,36.77,36.83,36.89,36.97,37.02,37.06,37.10,37.17,37.30,37.42</value>
+  </values>
+</entry>
+
+<entry id="iniflg">
+  <type>integer</type>
+  <group>freeform_b_021</group>
+  <desc>initial state flag (0 levl, 1 zonl, 2 clim)</desc>
+  <values>
+    <value>2</value>
+  </values>
+</entry>
+
+<entry id="jerlv0">
+  <type>integer</type>
+  <group>freeform_b_022</group>
+  <desc>initial jerlov water type (1 to 5; 0 for KPAR, -1 for CHL)</desc>
+  <values>
+    <value>-1</value>
+  </values>
+</entry>
+
+<entry id="yrflag">
+  <type>integer</type>
+  <group>freeform_b_023</group>
+  <desc>days in year flag (0 360, 1 366, 2 366J1, 3 actual)</desc>
+  <values>
+    <value>3</value>
+  </values>
+</entry>
+
+<entry id="sshflg">
+  <type>integer</type>
+  <group>freeform_b_024</group>
+  <desc>diagnostic SSH flag (0 SSH,1 SSH&amp;stericSSH)</desc>
+  <values>
+    <value>1</value>
+  </values>
+</entry>
+
+<entry id="dsurfq">
+  <type>real</type>
+  <group>freeform_b_025</group>
+  <desc>number of days between model diagnostics at the surface</desc>
+  <values>
+    <value>0.250</value>
+  </values>
+</entry>
+
+<entry id="diagfq">
+  <type>real</type>
+  <group>freeform_b_026</group>
+  <desc>number of days between model diagnostics</desc>
+  <values>
+    <value>0.250</value>
+  </values>
+</entry>
+
+<entry id="proffq">
+  <type>real</type>
+  <group>freeform_b_027</group>
+  <desc>number of days between model diagnostics at selected locs</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="tilefq">
+  <type>real</type>
+  <group>freeform_b_028</group>
+  <desc>number of days between model diagnostics on selected tiles</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="meanfq">
+  <type>real</type>
+  <group>freeform_b_029</group>
+  <desc>number of days between model diagnostics (time averaged)</desc>
+  <values>
+    <value>0.250</value>
+  </values>
+</entry>
+
+<entry id="rstrfq">
+  <type>real</type>
+  <group>freeform_b_030</group>
+  <desc>number of days between model restart output</desc>
+  <values>
+    <value>0.25</value>
+  </values>
+</entry>
+
+<entry id="bnstfq">
+  <type>real</type>
+  <group>freeform_b_031</group>
+  <desc>number of days between baro nesting archive input</desc>
+  <values>
+    <value>0.125</value>
+  </values>
+</entry>
+
+<entry id="nestfq">
+  <type>real</type>
+  <group>freeform_b_032</group>
+  <desc>number of days between 3-d nesting archive input</desc>
+  <values>
+    <value>0.25</value>
+  </values>
+</entry>
+
+<entry id="cplifq">
+  <type>real</type>
+  <group>freeform_b_033</group>
+  <desc>number of days (or time steps) between sea ice coupling</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="baclin">
+  <type>real</type>
+  <group>freeform_b_034</group>
+  <desc>baroclinic time step (seconds), int. divisor of 86400</desc>
+  <values>
+    <value>120.0</value>
+  </values>
+</entry>
+
+<entry id="batrop">
+  <type>real</type>
+  <group>freeform_b_035</group>
+  <desc>barotropic time step (seconds), int. div. of baclin/2</desc>
+  <values>
+    <value>10.0</value>
+  </values>
+</entry>
+
+<entry id="incflg">
+  <type>integer</type>
+  <group>freeform_b_036</group>
+  <desc>incremental update flag (0 no, 1 yes, 2 full-velocity)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="incstp">
+  <type>integer</type>
+  <group>freeform_b_037</group>
+  <desc>no. timesteps for full update (1 direct insertion)</desc>
+  <values>
+    <value>120</value>
+  </values>
+</entry>
+
+<entry id="incupf">
+  <type>integer</type>
+  <group>freeform_b_038</group>
+  <desc>number of days of incremental updating input</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="stfflg">
+  <type>integer</type>
+  <group>freeform_b_039</group>
+  <desc>stochastic anomaly forcing flag (0 no, 1 TS, 2 TSV)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="stfrdt">
+  <type>real</type>
+  <group>freeform_b_040</group>
+  <desc>stochastic T anomaly forcing e-folding depth (m)</desc>
+  <values>
+    <value>50.0</value>
+  </values>
+</entry>
+
+<entry id="stfrds">
+  <type>real</type>
+  <group>freeform_b_041</group>
+  <desc>stochastic S anomaly forcing e-folding depth (m)</desc>
+  <values>
+    <value>50.0</value>
+  </values>
+</entry>
+
+<entry id="stfrdv">
+  <type>real</type>
+  <group>freeform_b_042</group>
+  <desc>stochastic V anomaly forcing e-folding depth (m)</desc>
+  <values>
+    <value>50.0</value>
+  </values>
+</entry>
+
+<entry id="ra2fac">
+  <type>real</type>
+  <group>freeform_b_043</group>
+  <desc>weight for Robert-Asselin time filter</desc>
+  <values>
+    <value>0.125</value>
+  </values>
+</entry>
+
+<entry id="wbaro">
+  <type>real</type>
+  <group>freeform_b_044</group>
+  <desc>weight for time smoothing of barotropic fields</desc>
+  <values>
+    <value>0.125</value>
+  </values>
+</entry>
+
+<entry id="btrlfr">
+  <type>logical</type>
+  <group>freeform_b_045</group>
+  <desc>leapfrog barotropic time step (0 F,1 T)</desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="btrmas">
+  <type>logical</type>
+  <group>freeform_b_046</group>
+  <desc>barotropic is mass conserving (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="hybraf">
+  <type>logical</type>
+  <group>freeform_b_047</group>
+  <desc>HYBGEN: Robert-Asselin flag (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="hybrlx">
+  <type>real</type>
+  <group>freeform_b_048</group>
+  <desc>HYBGEN: inverse relaxation coefficient (time steps)</desc>
+  <values>
+    <value>16.0</value>
+  </values>
+</entry>
+
+<entry id="hybiso">
+  <type>real</type>
+  <group>freeform_b_049</group>
+  <desc>HYBGEN: Use PCM if layer is within hybiso of target density</desc>
+  <values>
+    <value>0.01</value>
+  </values>
+</entry>
+
+<entry id="hybmap">
+  <type>integer</type>
+  <group>freeform_b_050</group>
+  <desc>HYBGEN: remapper flag (0 PCM, 1 PLM, 2 PPM, 3 WENO-like)</desc>
+  <values>
+    <value>3</value>
+  </values>
+</entry>
+
+<entry id="hybflg">
+  <type>integer</type>
+  <group>freeform_b_051</group>
+  <desc>HYBGEN: generator flag (0 T&amp;S, 1 th&amp;S, 2 th&amp;T)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="advflg">
+  <type>integer</type>
+  <group>freeform_b_052</group>
+  <desc>thermal advection flag (0 T&amp;S, 1 th&amp;S, 2 th&amp;T)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="advtyp">
+  <type>integer</type>
+  <group>freeform_b_053</group>
+  <desc>scalar advection type (0 PCM,1 MPDATA,2 FCT2,4 FCT4)</desc>
+  <values>
+    <value>2</value>
+  </values>
+</entry>
+
+<entry id="momtyp">
+  <type>integer</type>
+  <group>freeform_b_054</group>
+  <desc>momentum advection type (2 2nd order, 4 4th order)</desc>
+  <values>
+    <value>2</value>
+  </values>
+</entry>
+
+<entry id="slip">
+  <type>real</type>
+  <group>freeform_b_055</group>
+  <desc>+1 for free-slip, -1 for non-slip boundary conditions</desc>
+  <values>
+    <value>-1.0</value>
+  </values>
+</entry>
+
+<entry id="visco2">
+  <type>real</type>
+  <group>freeform_b_056</group>
+  <desc>deformation-dependent Laplacian viscosity factor</desc>
+  <values>
+    <value>0.05</value>
+  </values>
+</entry>
+
+<entry id="visco4">
+  <type>real</type>
+  <group>freeform_b_057</group>
+  <desc>deformation-dependent biharmonic viscosity factor</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="facdf4">
+  <type>real</type>
+  <group>freeform_b_058</group>
+  <desc>speed-dependent biharmonic viscosity factor</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="veldf2">
+  <type>real</type>
+  <group>freeform_b_059</group>
+  <desc>diffusion velocity (m/s) for Laplacian momentum dissip.</desc>
+  <values>
+    <value>-0.00286</value>
+  </values>
+</entry>
+
+<entry id="veldf4">
+  <type>real</type>
+  <group>freeform_b_060</group>
+  <desc>diffusion velocity (m/s) for biharmonic momentum dissip.</desc>
+  <values>
+    <value>-0.02</value>
+  </values>
+</entry>
+
+<entry id="thkdf2">
+  <type>real</type>
+  <group>freeform_b_061</group>
+  <desc>diffusion velocity (m/s) for Laplacian thickness diffus.</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="thkdf4">
+  <type>real</type>
+  <group>freeform_b_062</group>
+  <desc>diffusion velocity (m/s) for biharmonic thickness diffus.</desc>
+  <values>
+    <value>0.01</value>
+  </values>
+</entry>
+
+<entry id="temdf2">
+  <type>real</type>
+  <group>freeform_b_063</group>
+  <desc>diffusion velocity (m/s) for Laplacian temp/saln diffus.</desc>
+  <values>
+    <value>0.005</value>
+  </values>
+</entry>
+
+<entry id="temdfc">
+  <type>real</type>
+  <group>freeform_b_064</group>
+  <desc>temp diffusion conservation (0.0,1.0 all dens,temp resp.)</desc>
+  <values>
+    <value>1.0</value>
+  </values>
+</entry>
+
+<entry id="vertmx">
+  <type>real</type>
+  <group>freeform_b_065</group>
+  <desc>diffusion velocity (m/s) for momentum at MICOM M.L.base</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="cbar">
+  <type>real</type>
+  <group>freeform_b_066</group>
+  <desc>rms flow speed (m/s) for linear bottom friction</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="cb">
+  <type>real</type>
+  <group>freeform_b_067</group>
+  <desc>coefficient of quadratic bottom friction (-ve input)</desc>
+  <values>
+    <value>2.5e-3</value>
+  </values>
+</entry>
+
+<entry id="drglim">
+  <type>real</type>
+  <group>freeform_b_068</group>
+  <desc>limiter for explicit friction (1.0 none, 0.0 implicit)</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="thkbot">
+  <type>real</type>
+  <group>freeform_b_069</group>
+  <desc>thickness of bottom boundary layer (m)</desc>
+  <values>
+    <value>10.0</value>
+  </values>
+</entry>
+
+<entry id="sigjmp">
+  <type>real</type>
+  <group>freeform_b_070</group>
+  <desc>minimum density jump across interfaces (kg/m**3)</desc>
+  <values>
+    <value>0.02</value>
+  </values>
+</entry>
+
+<entry id="tmljmp">
+  <type>real</type>
+  <group>freeform_b_071</group>
+  <desc>equivalent temperature jump across mixed-layer (degC)</desc>
+  <values>
+    <value>0.3</value>
+  </values>
+</entry>
+
+<entry id="sefold">
+  <type>real</type>
+  <group>freeform_b_072</group>
+  <desc>e-folding time for SSS relaxation (days)</desc>
+  <values>
+    <value>30.0</value>
+  </values>
+</entry>
+
+<entry id="thkmls">
+  <type>real</type>
+  <group>freeform_b_073</group>
+  <desc>reference mixed-layer thickness for SSS relaxation (m)</desc>
+  <values>
+    <value>15.0</value>
+  </values>
+</entry>
+
+<entry id="thkmlt">
+  <type>real</type>
+  <group>freeform_b_074</group>
+  <desc>reference mixed-layer thickness for SST relaxation (m)</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="thkriv">
+  <type>real</type>
+  <group>freeform_b_075</group>
+  <desc>nominal thickness of river inflow (m)</desc>
+  <values>
+    <value>6.0</value>
+  </values>
+</entry>
+
+<entry id="thkcdw">
+  <type>real</type>
+  <group>freeform_b_076</group>
+  <desc>thickness for near-surface currents in ice-ocean stress (m)</desc>
+  <values>
+    <value>3.0</value>
+  </values>
+</entry>
+
+<entry id="thkfrz">
+  <type>real</type>
+  <group>freeform_b_077</group>
+  <desc>maximum thickness of near-surface freezing zone (m)</desc>
+  <values>
+    <value>20.0</value>
+  </values>
+</entry>
+
+<entry id="iceflg">
+  <type>integer</type>
+  <group>freeform_b_078</group>
+  <desc>sea ice model flag (0 none,1 energy loan,2,4 coupled/esmf)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="tfrz_0">
+  <type>real</type>
+  <group>freeform_b_079</group>
+  <desc>ENLN: ice melting point (degC) at S 0psu</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="tfrz_s">
+  <type>real</type>
+  <group>freeform_b_080</group>
+  <desc>ENLN: gradient of ice melting point (degC/psu)</desc>
+  <values>
+    <value>-0.054</value>
+  </values>
+</entry>
+
+<entry id="frzifq">
+  <type>real</type>
+  <group>freeform_b_081</group>
+  <desc>e-folding time scale back to tfrz (days or -ve time steps)</desc>
+  <values>
+    <value>.04166667</value>
+  </values>
+</entry>
+
+<entry id="ticegr">
+  <type>real</type>
+  <group>freeform_b_082</group>
+  <desc>ENLN: temp. grad. inside ice (deg/m);  0 use surtmp</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="hicemn">
+  <type>real</type>
+  <group>freeform_b_083</group>
+  <desc>ENLN: minimum ice thickness (m)</desc>
+  <values>
+    <value>0.5</value>
+  </values>
+</entry>
+
+<entry id="hicemx">
+  <type>real</type>
+  <group>freeform_b_084</group>
+  <desc>ENLN: maximum ice thickness (m)</desc>
+  <values>
+    <value>99.0</value>
+  </values>
+</entry>
+
+<entry id="ishelf">
+  <type>integer</type>
+  <group>freeform_b_085</group>
+  <desc>ice shelf flag (0 none,1 ice shelf over ocean)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="ntracr">
+  <type>integer</type>
+  <group>freeform_b_086</group>
+  <desc>number of tracers (0 none,negative to initialize)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="trcflg">
+  <type>integer</type>
+  <group>freeform_b_087</group>
+  <desc>tracer flags (one digit per tr, most sig. replicated)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="tsofrq">
+  <type>integer</type>
+  <group>freeform_b_088</group>
+  <desc>number of time steps between anti-drift offset calcs</desc>
+  <values>
+    <value>180</value>
+  </values>
+</entry>
+
+<entry id="tofset">
+  <type>real</type>
+  <group>freeform_b_089</group>
+  <desc>temperature anti-drift offset (degC/century)</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="sofset">
+  <type>real</type>
+  <group>freeform_b_090</group>
+  <desc>salnity anti-drift offset (psu/century)</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="mlflag">
+  <type>integer</type>
+  <group>freeform_b_091</group>
+  <desc>mixed layer flag (0 none,1 KPP,2-3 KT,4 PWP,5 MY,6 GISS)</desc>
+  <values>
+    <value>1</value>
+  </values>
+</entry>
+
+<entry id="pensol">
+  <type>logical</type>
+  <group>freeform_b_092</group>
+  <desc>KT: activate penetrating solar rad. (0 F,1 T)</desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="dtrate">
+  <type>real</type>
+  <group>freeform_b_093</group>
+  <desc>KT: maximum permitted m.l. detrainment rate (m/day)</desc>
+  <values>
+    <value>999.0</value>
+  </values>
+</entry>
+
+<entry id="thkmin">
+  <type>real</type>
+  <group>freeform_b_094</group>
+  <desc>KT/PWP: minimum mixed-layer thickness (m)</desc>
+  <values>
+    <value>19.2</value>
+  </values>
+</entry>
+
+<entry id="dypflg">
+  <type>integer</type>
+  <group>freeform_b_095</group>
+  <desc>KT/PWP: diapycnal mixing flag (0 none, 1 KPP, 2 explicit)</desc>
+  <values>
+    <value>1</value>
+  </values>
+</entry>
+
+<entry id="mixfrq">
+  <type>integer</type>
+  <group>freeform_b_096</group>
+  <desc>KT/PWP: number of time steps between diapycnal mix calcs</desc>
+  <values>
+    <value>90</value>
+  </values>
+</entry>
+
+<entry id="diapyc">
+  <type>real</type>
+  <group>freeform_b_097</group>
+  <desc>KT/PWP: diapycnal diffusivity x buoyancy freq. (m**2/s**2)</desc>
+  <values>
+    <value>1.e-7</value>
+  </values>
+</entry>
+
+<entry id="rigr">
+  <type>real</type>
+  <group>freeform_b_098</group>
+  <desc>PWP: critical gradient richardson number</desc>
+  <values>
+    <value>0.25</value>
+  </values>
+</entry>
+
+<entry id="ribc">
+  <type>real</type>
+  <group>freeform_b_099</group>
+  <desc>PWP: critical bulk richardson number</desc>
+  <values>
+    <value>0.65</value>
+  </values>
+</entry>
+
+<entry id="rinfty">
+  <type>real</type>
+  <group>freeform_b_100</group>
+  <desc>KPP: maximum gradient richardson number (shear inst.)</desc>
+  <values>
+    <value>0.7</value>
+  </values>
+</entry>
+
+<entry id="ricr">
+  <type>real</type>
+  <group>freeform_b_101</group>
+  <desc>KPP: critical bulk richardson number</desc>
+  <values>
+    <value>0.25</value>
+  </values>
+</entry>
+
+<entry id="bldmin">
+  <type>real</type>
+  <group>freeform_b_102</group>
+  <desc>KPP: minimum surface boundary layer thickness (m)</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="bldmax">
+  <type>real</type>
+  <group>freeform_b_103</group>
+  <desc>K-PROF: maximum surface boundary layer thickness (m)</desc>
+  <values>
+    <value>1200.0</value>
+  </values>
+</entry>
+
+<entry id="cekman">
+  <type>real</type>
+  <group>freeform_b_104</group>
+  <desc>KPP/KT: scale factor for Ekman depth</desc>
+  <values>
+    <value>0.7</value>
+  </values>
+</entry>
+
+<entry id="cmonob">
+  <type>real</type>
+  <group>freeform_b_105</group>
+  <desc>KPP: scale factor for Monin-Obukov depth</desc>
+  <values>
+    <value>1.0</value>
+  </values>
+</entry>
+
+<entry id="bblkpp">
+  <type>logical</type>
+  <group>freeform_b_106</group>
+  <desc>KPP: activate bottom boundary layer (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="shinst">
+  <type>logical</type>
+  <group>freeform_b_107</group>
+  <desc>KPP: activate shear instability mixing (0 F,1 T)</desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="dbdiff">
+  <type>logical</type>
+  <group>freeform_b_108</group>
+  <desc>KPP: activate double diffusion mixing (0 F,1 T)</desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="nonloc">
+  <type>logical</type>
+  <group>freeform_b_109</group>
+  <desc>KPP: activate nonlocal b. layer mixing (0 F,1 T)</desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="botdiw">
+  <type>logical</type>
+  <group>freeform_b_110</group>
+  <desc>K-PROF: activate bot.enhan.int.wav mixing (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="difout">
+  <type>logical</type>
+  <group>freeform_b_111</group>
+  <desc>K-PROF: output visc/diff coffs in archive (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="difsmo">
+  <type>integer</type>
+  <group>freeform_b_112</group>
+  <desc>K-PROF: number of layers with horiz smooth diff coeffs</desc>
+  <values>
+    <value>14</value>
+  </values>
+</entry>
+
+<entry id="difm0">
+  <type>real</type>
+  <group>freeform_b_113</group>
+  <desc>KPP: max viscosity due to shear instability (m**2/s)</desc>
+  <values>
+    <value>50.0e-4</value>
+  </values>
+</entry>
+
+<entry id="difs0">
+  <type>real</type>
+  <group>freeform_b_114</group>
+  <desc>KPP: max diffusivity due to shear instability (m**2/s)</desc>
+  <values>
+    <value>50.0e-4</value>
+  </values>
+</entry>
+
+<entry id="difmiw">
+  <type>real</type>
+  <group>freeform_b_115</group>
+  <desc>KPP: background/internal wave viscosity (m**2/s)</desc>
+  <values>
+    <value>0.3e-4</value>
+  </values>
+</entry>
+
+<entry id="difsiw">
+  <type>real</type>
+  <group>freeform_b_116</group>
+  <desc>KPP: background/internal wave diffusivity (m**2/s)</desc>
+  <values>
+    <value>0.1e-4</value>
+  </values>
+</entry>
+
+<entry id="dsfmax">
+  <type>real</type>
+  <group>freeform_b_117</group>
+  <desc>KPP: salt fingering diffusivity factor (m**2/s)</desc>
+  <values>
+    <value>10.0e-4</value>
+  </values>
+</entry>
+
+<entry id="rrho0">
+  <type>real</type>
+  <group>freeform_b_118</group>
+  <desc>KPP: salt fingering rp (alpha*delT)/(beta*delS)</desc>
+  <values>
+    <value>1.9</value>
+  </values>
+</entry>
+
+<entry id="cs">
+  <type>real</type>
+  <group>freeform_b_119</group>
+  <desc>KPP: value for nonlocal flux term</desc>
+  <values>
+    <value>98.96</value>
+  </values>
+</entry>
+
+<entry id="cstar">
+  <type>real</type>
+  <group>freeform_b_120</group>
+  <desc>KPP: value for nonlocal flux term</desc>
+  <values>
+    <value>10.0</value>
+  </values>
+</entry>
+
+<entry id="cv">
+  <type>real</type>
+  <group>freeform_b_121</group>
+  <desc>KPP: buoyancy frequency ratio (0.0 to use a fn. of N)</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="c11">
+  <type>real</type>
+  <group>freeform_b_122</group>
+  <desc>KPP: value for turb velocity scale</desc>
+  <values>
+    <value>5.0</value>
+  </values>
+</entry>
+
+<entry id="hblflg">
+  <type>integer</type>
+  <group>freeform_b_123</group>
+  <desc>KPP: b. layer interp. flag (0 const.,1 linear,2 quad.)</desc>
+  <values>
+    <value>2</value>
+  </values>
+</entry>
+
+<entry id="niter">
+  <type>integer</type>
+  <group>freeform_b_124</group>
+  <desc>KPP: iterations for semi-implicit soln. (2 recomended)</desc>
+  <values>
+    <value>2</value>
+  </values>
+</entry>
+
+<entry id="langmr">
+  <type>integer</type>
+  <group>freeform_b_125</group>
+  <desc>KPP: Langmuir flag (0 no;1 Sul;2 Smy;3 Har;4 Tak)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="fltflg">
+  <type>integer</type>
+  <group>freeform_b_126</group>
+  <desc>FLOATS: synthetic float flag (0 no; 1 yes)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="nfladv">
+  <type>integer</type>
+  <group>freeform_b_127</group>
+  <desc>FLOATS: advect every nfladv bacl. time steps (even, &gt; 4)</desc>
+  <values>
+    <value>4</value>
+  </values>
+</entry>
+
+<entry id="nflsam">
+  <type>integer</type>
+  <group>freeform_b_128</group>
+  <desc>FLOATS: output (0 every nfladv steps; &gt;0 no. of days)</desc>
+  <values>
+    <value>1</value>
+  </values>
+</entry>
+
+<entry id="intpfl">
+  <type>integer</type>
+  <group>freeform_b_129</group>
+  <desc>FLOATS: horiz. interp. (0 2nd order+n.n.; 1 n.n. only)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="iturbv">
+  <type>integer</type>
+  <group>freeform_b_130</group>
+  <desc>FLOATS: add horiz. turb. advection velocity (0 no; 1 yes)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="ismpfl">
+  <type>integer</type>
+  <group>freeform_b_131</group>
+  <desc>FLOATS: sample water properties at float (0 no; 1 yes)</desc>
+  <values>
+    <value>1</value>
+  </values>
+</entry>
+
+<entry id="tbvar">
+  <type>real</type>
+  <group>freeform_b_132</group>
+  <desc>FLOATS: horizontal turb. vel. variance scale (m**2/s**2)</desc>
+  <values>
+    <value>4.63e-6</value>
+  </values>
+</entry>
+
+<entry id="tdecri">
+  <type>real</type>
+  <group>freeform_b_133</group>
+  <desc>FLOATS: inverse decorrelation time scale (1/day)</desc>
+  <values>
+    <value>0.4</value>
+  </values>
+</entry>
+
+<entry id="lbflag">
+  <type>integer</type>
+  <group>freeform_b_134</group>
+  <desc>lateral barotropic bndy flag (0 none, 1 port, 2 input)</desc>
+  <values>
+    <value>2</value>
+  </values>
+</entry>
+
+<entry id="lbmont">
+  <type>integer</type>
+  <group>freeform_b_135</group>
+  <desc>baro nesting archives have sshflg 2</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="tidflg">
+  <type>integer</type>
+  <group>freeform_b_136</group>
+  <desc>TIDES: tidal forcing flag (0 none,1 open-bdy,2 bdy&amp;body)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="tidein">
+  <type>integer</type>
+  <group>freeform_b_137</group>
+  <desc>TIDES: tide field input flag (0 no;1 yes;2 sal)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="tidcon">
+  <type>integer</type>
+  <group>freeform_b_138</group>
+  <desc>TIDES: 1 digit per (Q1K2P1N2O1K1S2M2), 0 off,1 on</desc>
+  <values>
+    <value>00000001</value>
+  </values>
+</entry>
+
+<entry id="tidsal">
+  <type>real</type>
+  <group>freeform_b_139</group>
+  <desc>TIDES: scalar self attraction and loading factor</desc>
+  <values>
+    <value>0.06</value>
+  </values>
+</entry>
+
+<entry id="tiddrg">
+  <type>integer</type>
+  <group>freeform_b_140</group>
+  <desc>TIDES: tidal drag flag (0 no;1 scalar;2 tensor)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="thkdrg">
+  <type>real</type>
+  <group>freeform_b_141</group>
+  <desc>TIDES: thickness of tidal drag bottom boundary layer (m)</desc>
+  <values>
+    <value>500.0</value>
+  </values>
+</entry>
+
+<entry id="drgscl">
+  <type>real</type>
+  <group>freeform_b_142</group>
+  <desc>TIDES: scale factor for tidal drag (0.0 when tiddrg 0)</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="tidgen">
+  <type>logical</type>
+  <group>freeform_b_143</group>
+  <desc>TIDES: generic time (0 F,1 T)</desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="tidrmp">
+  <type>real</type>
+  <group>freeform_b_144</group>
+  <desc>TIDES: ramp time (days)</desc>
+  <values>
+    <value>1.0</value>
+  </values>
+</entry>
+
+<entry id="tid_t0">
+  <type>real</type>
+  <group>freeform_b_145</group>
+  <desc>TIDES: origin for ramp time (model day)</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="clmflg">
+  <type>integer</type>
+  <group>freeform_b_146</group>
+  <desc>climatology frequency flag (6 bimonthly, 12 monthly)</desc>
+  <values>
+    <value>12</value>
+  </values>
+</entry>
+
+<entry id="wndflg">
+  <type>integer</type>
+  <group>freeform_b_147</group>
+  <desc>wind stress input flag (0 none,1 u/v-grid,2,3 p-grid,4 10m)</desc>
+  <values>
+    <value>2</value>
+  </values>
+</entry>
+
+<entry id="ustflg">
+  <type>integer</type>
+  <group>freeform_b_148</group>
+  <desc>ustar forcing flag (3 input,1,2 wndspd,4 stress)</desc>
+  <values>
+    <value>4</value>
+  </values>
+</entry>
+
+<entry id="flxflg">
+  <type>integer</type>
+  <group>freeform_b_149</group>
+  <desc>thermal forcing flag (0 none,3 net-flux,1,2,4 sst-based)</desc>
+  <values>
+    <value>4</value>
+  </values>
+</entry>
+
+<entry id="empflg">
+  <type>integer</type>
+  <group>freeform_b_150</group>
+  <desc>E-P forcing flag (0 none,3 net_E-P, 1,2,4 sst-bas_E)</desc>
+  <values>
+    <value>4</value>
+  </values>
+</entry>
+
+<entry id="emptgt">
+  <type>real</type>
+  <group>freeform_b_151</group>
+  <desc>E-P balance target (mm/week, into ocean)</desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="empbal">
+  <type>integer</type>
+  <group>freeform_b_152</group>
+  <desc>E-P balance flag (0 none,1 offset,2 scale)</desc>
+  <values>
+    <value>1</value>
+  </values>
+</entry>
+
+<entry id="dswflg">
+  <type>integer</type>
+  <group>freeform_b_153</group>
+  <desc>diurnal shortwave flag (0 none,1 daily to diurnal corr.)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="albflg">
+  <type>integer</type>
+  <group>freeform_b_154</group>
+  <desc>ocean albedo flag (0 none,1 .06,2 L&amp;Y)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="sssflg">
+  <type>integer</type>
+  <group>freeform_b_155</group>
+  <desc>SSS relaxation flag (0 none,1 clim,-1 clim&amp;rmx)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="sssbal">
+  <type>integer</type>
+  <group>freeform_b_156</group>
+  <desc>SSS rlx balance flag (0 none,1 offset,2 scale)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="lwflag">
+  <type>integer</type>
+  <group>freeform_b_157</group>
+  <desc>longwave (SST) flag (0 none,1 clim,2 atmos)</desc>
+  <values>
+    <value>2</value>
+  </values>
+</entry>
+
+<entry id="sstflg">
+  <type>integer</type>
+  <group>freeform_b_158</group>
+  <desc>SST relaxation flag (0 none,1 clim,2 atmos,3 observed)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="icmflg">
+  <type>integer</type>
+  <group>freeform_b_159</group>
+  <desc>ice mask flag (0 none,1 clim,2 atmos,3 obs/coupled)</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="prsbas">
+  <type>real</type>
+  <group>freeform_b_160</group>
+  <desc>msl pressure is input field + prsbas (Pa)</desc>
+  <values>
+    <value>1.0e+5</value>
+  </values>
+</entry>
+
+<entry id="mslprf">
+  <type>logical</type>
+  <group>freeform_b_161</group>
+  <desc>msl pressure forcing flag (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="stroff">
+  <type>logical</type>
+  <group>freeform_b_162</group>
+  <desc>net stress offset flag (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="flxoff">
+  <type>logical</type>
+  <group>freeform_b_163</group>
+  <desc>net flux offset flag (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="flxsmo">
+  <type>logical</type>
+  <group>freeform_b_164</group>
+  <desc>smooth surface fluxes (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="relax">
+  <type>logical</type>
+  <group>freeform_b_165</group>
+  <desc>activate lateral boundary nudging (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="trcrlx">
+  <type>logical</type>
+  <group>freeform_b_166</group>
+  <desc>activate lat. bound. tracer nudging (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="priver">
+  <type>logical</type>
+  <group>freeform_b_167</group>
+  <desc>rivers as a precipitation bogas (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="epmass">
+  <type>logical</type>
+  <group>freeform_b_168</group>
+  <desc>treat evap-precip as a mass exchange (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="stdflg">
+  <type>logical</type>
+  <group>freeform_b_173</group>
+  <desc>STOKES: kinematics and dynamics (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="stdsur">
+  <type>logical</type>
+  <group>freeform_b_174</group>
+  <desc>STOKES: surface stress (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="stdbot">
+  <type>logical</type>
+  <group>freeform_b_175</group>
+  <desc>STOKES: bottom friction (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="stdarc">
+  <type>logical</type>
+  <group>freeform_b_176</group>
+  <desc>STOKES: stokes drift in archives (0 F,1 T)</desc>
+  <values>
+    <value>.false.</value>
+  </values>
+</entry>
+
+<entry id="nsdzi">
+  <type>integer</type>
+  <group>freeform_b_177</group>
+  <desc>STOKES: number of fixed interface depths for input</desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<!-- =========================== -->
+<!-- NUOPC -->
+<!-- =========================== -->
+
+<entry id="cdf_impexp_freq">
+  <type>integer</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>3</value>
+  </values>
+</entry>
+
+<entry id="cpl_hour">
+  <type>integer</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="cpl_min">
+  <type>integer</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="cpl_sec">
+  <type>integer</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="base_dtg">
+  <type>char</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>9999999999</value>
+  </values>
+</entry>
+
+<entry id="hycom_arche_output">
+  <type>logical</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="hyc_esmf_exp_output">
+  <type>logical</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="hyc_esmf_imp_output">
+  <type>logical</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="hyc_impexp_file">
+  <type>char</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>dummy_file</value>
+  </values>
+</entry>
+
+<entry id="espc_show_impexp_minmax">
+  <type>logical</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>.true.</value>
+  </values>
+</entry>
+
+<entry id="ocean_start_dtg">
+  <type>real</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>0.0</value>
+  </values>
+</entry>
+
+<entry id="start_hour">
+  <type>integer</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="start_min">
+  <type>integer</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="start_sec">
+  <type>integer</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="end_hour">
+  <type>integer</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="end_min">
+  <type>integer</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<entry id="end_sec">
+  <type>integer</type>
+  <category>esmf_config</category>
+  <group>OCN_attributes</group>
+  <desc>
+  </desc>
+  <values>
+    <value>0</value>
+  </values>
+</entry>
+
+<!-- =========================== -->
+<!-- HYCOM-Tools partit -->
+<!-- =========================== -->
+
+<entry id="npe">
+  <type>integer</type>
+  <group>partit</group>
+  <desc>number of tiles in x direction</desc>
+  <values>
+    <value>20</value>
+  </values>
+</entry>
+
+<entry id="mpe">
+  <type>integer</type>
+  <group>partit</group>
+  <desc>number of tiles in y direction</desc>
+  <values>
+    <value>6</value>
+  </values>
+</entry>
+
+<entry id="sfudge">
+  <type>real</type>
+  <group>partit</group>
+  <desc>
+  size fudge factor (0.5 to 9.9, larger for more variation)
+  &lt; 1.0 to keep all  constant-sized tiles
+  &gt; 9.0 to shift     constant-sized tiles
+  &gt; 9.8 to double-up constant-sized tiles
+  </desc>
+  <values>
+    <value>0.75</value>
+  </values>
+</entry>
+
+<entry id="partit_exe">
+  <type>char</type>
+  <group>partit</group>
+  <desc>partit executable</desc>
+  <valid_values>partit,partit_arctic,partit_arctic_ns,partit_landsea,partit_mom6,partit_noshrink,partit_resize,partit_row1st,partit_test</valid_values>
+  <values>
+    <value>partit</value>
+  </values>
+</entry>
+
+</entry_id>

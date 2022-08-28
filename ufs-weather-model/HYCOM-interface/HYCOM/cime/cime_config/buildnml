@@ -1,0 +1,590 @@
+#!/usr/bin/env python
+
+"""hycom namelist creator
+"""
+
+# Typically ignore this.
+# pylint: disable=invalid-name
+
+# Disable these because this is our standard setup
+# pylint: disable=wildcard-import,unused-wildcard-import,wrong-import-position
+
+import os, sys, copy, time, re
+from datetime import datetime, timedelta
+
+CIMEROOT = os.environ.get("CIMEROOT")
+if CIMEROOT is None:
+    raise SystemExit("ERROR: must set CIMEROOT environment variable")
+sys.path.append(os.path.join(CIMEROOT, "scripts", "Tools"))
+
+from standard_script_setup import *
+from CIME.case import Case
+from CIME.nmlgen import NamelistGenerator
+from CIME.namelist import Namelist, literal_to_python_value
+from CIME.buildnml import create_namelist_infile, parse_input
+from CIME.utils import expect, safe_copy, symlink_force
+
+logger = logging.getLogger(__name__)
+
+HYCOM_TOOLS_PATH = os.environ.get("HYCOM_TOOLS_PATH")
+if HYCOM_TOOLS_PATH:
+    logger.info("HYCOM_TOOLS_PATH is set to {}".format(HYCOM_TOOLS_PATH))
+else:
+    logger.info("HYCOM_TOOLS_PATH is not set. patch.input can not be automatically generated")
+
+def hycom_date_to_regular_date(hyctime):
+    epoc = datetime(1901, 1 ,1, 0, 0)
+    new_date = epoc+timedelta(days=hyctime-1)
+    return new_date
+
+def regular_date_to_hycom_date(regtime):
+    epoc = datetime(1901, 1 ,1, 0, 0)
+    return (regtime-epoc+timedelta(days=1)).total_seconds()/86400.0
+
+# prepares the input files of a case and places in rundir:
+def prep_input(case, nmlgen_blkdat):
+    # Query case configuration
+    Buildconf = case.get_value("CASEBUILD")
+    rundir = case.get_value("RUNDIR")
+    din_loc_root = case.get_value("DIN_LOC_ROOT")
+    caseroot = case.get_value("CASEROOT")
+
+    # Query start and stop dates
+    global day1, day2
+    run_start_date = case.get_value('RUN_STARTDATE').split('-')
+    yyyy = int(run_start_date[0])
+    mm = int(run_start_date[1])
+    dd = int(run_start_date[2])
+    run_start_tod = int(case.get_value('START_TOD'))
+    hh = run_start_tod//3600
+
+    start_date = datetime(yyyy, mm ,dd, hh, 0)
+    day1 = regular_date_to_hycom_date(start_date)
+
+    stop_option = case.get_value('STOP_OPTION')
+    stop_n = int(case.get_value('STOP_N'))
+    if 'nyears' in stop_option:
+        day2 = regular_date_to_hycom_date(start_date+timedelta(years=stop_n))
+    elif 'nmonths' in stop_option:
+        day2 = regular_date_to_hycom_date(start_date+timedelta(months=stop_n))
+    elif 'ndays' in stop_option:
+        day2 = regular_date_to_hycom_date(start_date+timedelta(days=stop_n))
+    elif 'nhours' in stop_option:
+        day2 = regular_date_to_hycom_date(start_date+timedelta(hours=stop_n))
+    elif 'nseconds' in stop_option:
+        day2 = regular_date_to_hycom_date(start_date+timedelta(seconds=stop_n))
+    elif 'nsteps' in stop_option:
+        expect(False, "STOP_OPTION = nsteps is not supported!")
+
+    stop_date = hycom_date_to_regular_date(day2)
+
+    logger.info("HYCOM will run from {} ({}) to {} ({})".format(start_date.strftime("%Y-%m-%d_%H:%M:%S"),
+                day1, stop_date.strftime("%Y-%m-%d_%H:%M:%S"), day2))
+
+    # Create generic dictionary to hold input files: [source_file, "ln" | "cp", target_file]
+    input_files = dict()
+
+    # Grid files
+    for field in ["depth", "grid"]:
+        for suffix in ["a", "b"]:
+            f = "regional.{}.{}".format(field, suffix)
+            input_files["{}_{}".format(field, suffix)] = [os.path.join(din_loc_root,"hafs","dorian",f), "ln", f]
+
+    # Initial condition
+    input_files["restart_in_a"] = [os.path.join(din_loc_root,"hafs","dorian","restart_in.a"), "ln", "restart_in.a"]
+    input_files["restart_in_b"] = [os.path.join(din_loc_root,"hafs","dorian","restart_in.b"), "ln", "restart_in.b"]
+
+    # Initialization of spatially varying veldf2, veldf4, and thkdf4
+    for field in ["thkdf4", "veldf2", "veldf4"]:
+        for suffix in ["a", "b"]:
+            f = "{}.{}".format(field, suffix)
+            input_files["{}_{}".format(field, suffix)] = [os.path.join(din_loc_root,"hafs","dorian",f), "ln", f]
+
+    # Forcing files
+    for field in ["airtmp", "chl", "precip", "presur", "radflx", "shwflx", "surtmp", "tauewd", "taunwd", "vapmix", "wndspd"]:
+        for suffix in ["a", "b"]:
+            f = "forcing.{}.{}".format(field, suffix)
+            input_files["{}_{}".format(field, suffix)] = [os.path.join(din_loc_root,"hafs","dorian",f), "ln", f]
+
+    # Relaxation conditions
+    for field in ["ssh"]:
+        for suffix in ["a", "b"]:
+            f = "relax.{}.{}".format(field, suffix)
+            input_files["{}_{}".format(field, suffix)] = [os.path.join(din_loc_root,"hafs","dorian",f), "ln", f]
+
+    # Add nesting files
+    lbflag = int(nmlgen_blkdat.get_value("lbflag"))
+    nestfq = nmlgen_blkdat.get_value("nestfq")
+    bnstfq = nmlgen_blkdat.get_value("bnstfq")
+    if lbflag == 2:
+        # Copy nest files
+        nestdir = os.path.join(rundir,"nest")
+        if not os.path.exists(nestdir):
+            os.makedirs(nestdir)
+        nstep = 24/int(1/float(bnstfq))
+        yday1 = start_date.timetuple().tm_yday
+        yday2 = stop_date.timetuple().tm_yday
+        for yday in xrange(yday1, yday2+1):
+            for hours in xrange(0, 24, nstep):
+                if yday == yday2 and hours > stop_date.hour:
+                    break
+                f = "archv.{}_{}".format(yyyy,yday)+"_{0:02d}.a".format(hours)
+                input_files[f.replace(".","_")] = [os.path.join(din_loc_root,"hafs","dorian","nest",f), "ln", os.path.join(nestdir,f)]
+                f = "archv.{}_{}".format(yyyy,yday)+"_{0:02d}.b".format(hours)
+                input_files[f.replace(".","_")] = [os.path.join(din_loc_root,"hafs","dorian","nest",f), "ln", os.path.join(nestdir,f)]
+        input_files["rmu_a"] =  [os.path.join(din_loc_root,"hafs","dorian","nest","rmu.a"), "ln", os.path.join(nestdir,"rmu.a")]
+        input_files["rmu_b"] =  [os.path.join(din_loc_root,"hafs","dorian","nest","rmu.b"), "ln", os.path.join(nestdir,"rmu.b")]
+
+    # Add file for spacially varying isopycnal layer target densities
+    vsigma = literal_to_python_value(nmlgen_blkdat.get_value("vsigma"))
+    if vsigma:
+        input_files["iso_sigma_a"] = [os.path.join(din_loc_root,"hafs","dorian","iso.sigma.a"), "ln", "iso.sigma.a"]
+        input_files["iso_sigma_b"] = [os.path.join(din_loc_root,"hafs","dorian","iso.sigma.b"), "ln", "iso.sigma.b"]
+
+    # Add file for spacially varying shallowest depth for isopycnal layers
+    isotop = float(nmlgen_blkdat.get_value("isotop"))
+    if isotop < 0.0:
+        input_files["iso_top_a"] = [os.path.join(din_loc_root,"hafs","dorian","iso.top.a"), "ln", "iso.top.a"]
+        input_files["iso_top_b"] = [os.path.join(din_loc_root,"hafs","dorian","iso.top.b"), "ln", "iso.top.a"]
+
+    # Add file for initialization of thermobaric reference state arrays
+    kapref = int(nmlgen_blkdat.get_value("kapref"))
+    if kapref == -1:
+        input_files["tbaric_a"] = [os.path.join(din_loc_root,"hafs","dorian","tbaric.a"), "ln", "tbaric.a"]
+        input_files["tbaric_b"] = [os.path.join(din_loc_root,"hafs","dorian","tbaric.b"), "ln", "tbaric.b"]
+
+    # Copy ports_input from case directory
+    src_file = os.path.join(caseroot,"SourceMods","src.hycom","ports.input")
+    dst_file = os.path.join(rundir,"ports.input")
+    if os.path.isfile(dst_file):
+        os.remove(dst_file)
+
+    if os.path.isfile(src_file):
+        safe_copy(src_file, dst_file)
+        logger.info("Using custom {}".format(src_file))
+    else:
+        logger.info("Using {}".format(os.path.join(din_loc_root,"hafs","dorian","ports.input")))
+        input_files["ports_input"] = [os.path.join(din_loc_root,"hafs","dorian","ports.input"), "cp", "ports.input"]
+
+    # Write input file list
+    with open(os.path.join(Buildconf,"hycom.input_data_list"), 'w') as input_data_list:
+        for k,v in input_files.items():
+            input_data_list.write(k+" = "+v[0]+"\n")
+
+    # Copy/Link files
+    for k,v in input_files.items():
+        if not os.path.isfile(os.path.join(rundir,v[2])):
+            if not os.path.isfile(v[0]):
+                logger.warning("WARNING: data file {} not found, will attempt to download.".format(v[0]))
+            elif "ln" in v[1]:
+                symlink_force(v[0], os.path.join(rundir,v[2]))
+            elif "cp":
+                safe_copy(v[0], os.path.join(rundir,v[2]))
+
+# pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements
+###############################################################################
+def _write_blkdat(nmlgen, out_file, groups, sorted_groups):
+###############################################################################
+    """Blkdat version of `write` assuming that a file object is input."""
+
+    if groups is None:
+        groups = self._groups.keys()
+
+    if (sorted_groups):
+        group_names = sorted(group for group in groups)
+    else:
+        group_names = groups
+
+    # variables for checking vertical layer definition
+    nsigma = int(nmlgen.get_value("nsigma"))
+    remove_list_a = ["dp00", "dp00x", "dp00f", "ds00", "ds00x", "ds00f"]
+    remove_list_b = ["dp0k", "ds0k"]
+
+    lines = []
+    for group_name in group_names:
+        # allow empty group
+        if group_name in nmlgen._namelist._groups:
+            group = nmlgen._namelist._groups[group_name]
+            for name in sorted(group.keys()):
+                values = group[name]
+                values = [x.strip("\"") for x in values]
+                node = nmlgen._definition.get_child("entry", {"id":name})
+                desc = nmlgen._definition.get_description(node)
+                vtyp = nmlgen._definition._get_type_info(node)
+
+                # remove specific parameters from namelist
+                if nsigma > 0:
+                    if name in remove_list_a:
+                        continue
+                else:
+                    if name in remove_list_b:
+                        continue                    
+
+                # add item to list
+                if 'freeform_a' in group_name: # header
+                    if not values[0]:
+                        lines.append("{}".format("x"*80))
+                    else:
+                        title = ", ".join(values)
+                        if len(title) > 80:
+                            title = ",".join(values)
+                            if len(title) > 80:
+                                logger.info("The line in title section must be 80 character long! Please check following line:")
+                                logger.info(title)
+                        lines.append("{}".format(title))
+                else: # rest
+                    if len(values) > 1:
+                        i = 1
+                        for x in values:
+                            lines.append("{:>7}   '{:<6}' = {}".format(x, name, "layer {:>3} ".format(i)+desc))                 
+                            i = i+1
+                    else:        
+                        strlen = len(values[0])
+                        stremp = "{}".format(" "*(4-(strlen-6)))
+                        if "logical" in vtyp:
+                             lines.append("{:>7}   '{:<6}' = {}".format(0 if ".false." in values[0].strip() else 1, name, desc))
+                        else:
+                            if strlen > 6:
+                                lines.append("{:>{w1}}{w2}'{:<6}' = {}".format(values[0], name, desc, w1=strlen, w2=stremp))
+                            else:
+                                lines.append("{:>7}   '{:<6}' = {}".format(values[0], name, desc)) 
+
+    # Write namelist file
+    with open(out_file, 'w') as namelist:
+        for line in lines:
+            namelist.write(line+"\n")
+
+# pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements
+###############################################################################
+def _create_namelist(case, confdir, config, infile, nmlgen, groups):
+###############################################################################
+    """Write out the namelist for this component.
+
+    Most arguments are the same as those for `NamelistGenerator`.
+    The `confdir` argument is used to specify the directory  in which output files will be placed.
+    """
+
+    # Input data list
+    data_list_path = os.path.join(case.get_case_root(), "Buildconf", "hycom.input_data_list")
+
+    # Initialize namelist defaults
+    nmlgen.init_defaults(infile, config)
+
+    # Path for namelist files
+    srcroot = case.get_value("SRCROOT")
+
+    # Remove nuopc specific group
+    groups_local = groups[:]
+    groups_local.remove('OCN_attributes')
+    groups_local.remove('partit')
+    regex = re.compile('freeform_c')
+    groups_local = [x for x in groups_local if not regex.match(x)]
+
+    # Create namelist
+    namelist_file = os.path.join(confdir, "ocn_in")
+
+    # Write namelist
+    _write_blkdat(nmlgen, namelist_file, groups=groups_local, sorted_groups=True)
+
+# pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements
+###############################################################################
+def _create_patch_input(case, confdir, config, rundir, infile, nmlgen):
+###############################################################################
+    """Write out the patch.input for this component.
+    """
+
+    # Initialize namelist defaults
+    nmlgen.init_defaults(infile, config)
+
+    # Query number of processor
+    ntask_ocn = int(case.get_value('NTASKS_OCN'))
+
+    # Create patch.input 
+    found = False
+    if HYCOM_TOOLS_PATH:
+        # Check partit executable
+        partit_exe = nmlgen.get_value("partit_exe")
+        partit_path = os.path.join(HYCOM_TOOLS_PATH,"topo","src",partit_exe)
+        if not os.path.isfile(partit_path):
+            expect(False, "Executable is not found! {}".format(partit_path))
+        else:
+            logger.info("Executable {} will be used to generate patch.input".format(partit_exe))
+        found = True
+
+        # Check 2d-decomposition
+        n = int(nmlgen.get_value("npe"))
+        m = int(nmlgen.get_value("mpe"))
+        if ntask_ocn != n*m:
+            logger.info("NTASKS_OCN = {}".format(ntask_ocn))
+            logger.info("npe = {}".format(n))
+            logger.info("mpe = {}".format(m))
+            expect(False, "The number of tiles does not match with the number of processor assigned to the OCN component!")
+
+        # Create input file
+        namelist_file = os.path.join(confdir, "fort.5")
+        with open(namelist_file, 'w') as f:
+            f.write("{} {} {}".format(n,m,nmlgen.get_value("sfudge")))
+
+        # Create script
+        script_file = os.path.join(confdir, "partit.sh")
+        with open(script_file, 'w') as f:
+            f.write("#!/bin/bash\n\n")
+            f.write("export FOR051={}\n".format(os.path.join(rundir,"regional.depth.b")))
+            f.write("export FOR051A={}\n\n".format(os.path.join(rundir,"regional.depth.a")))
+            f.write("export n={}\n".format(n))
+            f.write("export m={}\n".format(m))
+            f.write("export nm={}\n\n".format(ntask_ocn))
+            f.write("ln -s {} .\n".format(os.path.join(rundir,"regional.grid.a")))
+            f.write("ln -s {} .\n".format(os.path.join(rundir,"regional.grid.b")))
+            f.write("rm -f fort.21\n")
+            f.write("{} < fort.5\n".format(partit_path))
+            f.write("mv fort.21 patch.input\n")
+            f.write("rm -f regional.grid.a regional.grid.b")
+
+        # Create 2D decomposition file and copy it
+        if os.path.isdir(confdir):
+            os.system("cd {}; chmod 755 partit.sh; ./partit.sh >& {}".format(confdir,os.path.join(rundir,"partit_log.txt")))
+            file1 = os.path.join(confdir, "patch.input")
+            file2 = os.path.join(rundir, "patch.input")
+            logger.info("Using {} - autogenerated".format(file1))
+            safe_copy(file1, file2)
+
+    if not found:
+        din_loc_root = case.get_value("DIN_LOC_ROOT")
+        patch_input_file = os.path.join(din_loc_root,"hafs","dorian","patch.input")
+        if os.path.isfile(patch_input_file):
+            logger.info("Using {}".format(patch_input_file))
+            safe_copy(patch_input_file, os.path.join(rundir, "patch.input"))
+        else:
+            expect(False, "The patch.input namelist file could not found in {}".format(os.path.join(rundir,"patch.input")))
+
+# pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements
+###############################################################################
+def _create_namelist_nuopc(case, confdir, config, infile, nmlgen):
+###############################################################################
+    """Write out the namelist for this component.
+
+    Most arguments are the same as those for `NamelistGenerator`.
+    The `confdir` argument is used to specify the directory  in which output files will be placed.
+    """
+
+    # Input data list
+    data_list_path = os.path.join(case.get_case_root(), "Buildconf", "hycom.input_data_list")
+
+    # Initialize namelist defaults
+    nmlgen.init_defaults(infile, config)
+
+    # Set run start date
+    run_start_date = case.get_value('RUN_STARTDATE').split('-')
+    yyyy = int(run_start_date[0])
+    mm = int(run_start_date[1])
+    dd = int(run_start_date[2])
+
+    run_start_tod = int(case.get_value('START_TOD'))
+    hh = run_start_tod//3600
+
+    start_date = datetime(yyyy, mm ,dd, hh, 0)
+    nmlgen.set_value('base_dtg', "{}".format(start_date.strftime("%Y%m%d%H")))
+    nmlgen.set_value('ocean_start_dtg', regular_date_to_hycom_date(start_date))
+
+    # Set run length
+    stop_option = case.get_value('STOP_OPTION')
+    stop_n = int(case.get_value('STOP_N'))
+    if 'nyears' in stop_option:
+        delta = timedelta(years=stop_n)
+    elif 'nmonths' in stop_option:
+        delta = timedelta(months=stop_n)
+    elif 'ndays' in stop_option:
+        delta = timedelta(days=stop_n)
+    elif 'nhours' in stop_option:
+        delta = timedelta(hours=stop_n)
+    elif 'nseconds' in stop_option:
+        delta = timedelta(seconds=stop_n)
+    elif 'nsteps' in stop_option:
+        expect(False, "STOP_OPTION = nsteps is not supported!")
+
+    delta_sec = int(delta.total_seconds())
+    hh = delta_sec//3600
+    mi = (delta_sec-hh*3600)//60
+    ss = delta_sec-(hh*3600+mi*60)
+    nmlgen.set_value('end_hour', hh)
+    nmlgen.set_value('end_min', mi)
+    nmlgen.set_value('end_sec', ss)
+
+    # Set group list
+    groups = ['OCN_attributes']
+
+    # Create namelist
+    namelist_file = os.path.join(confdir, "{}.configure".format(case.get_value('COMP_OCN')))
+
+    # Write namelist
+    nmlgen.write_nuopc_config_file(namelist_file, data_list_path)
+
+# pylint: disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements
+###############################################################################
+def _create_ports_input(case, confdir, config, rundir, infile, nmlgen):
+###############################################################################
+    """Write out the ports.input for this component.
+    """
+
+    # Initialize namelist defaults
+    nmlgen.init_defaults(infile, config)
+
+    # Check ports.input
+    found = False
+    if HYCOM_TOOLS_PATH:
+        # Check topo_ports executable
+        topo_ports_path = os.path.join(HYCOM_TOOLS_PATH,"topo","src","topo_ports")
+        if not os.path.isfile(topo_ports_path):
+            expect(False, "Executable is not found! {}".format(topo_ports_path))
+        else:
+            logger.info("Executable topo_ports will be used to check ports.input")
+        found = True
+
+        # Create script
+        script_file = os.path.join(confdir, "topo_ports.sh")
+        with open(script_file, 'w') as f:
+            f.write("#!/bin/bash\n\n")
+            f.write("export FOR051={}\n".format(os.path.join(rundir,"regional.depth.b")))
+            f.write("export FOR051A={}\n\n".format(os.path.join(rundir,"regional.depth.a")))
+            f.write("ln -s {} .\n".format(os.path.join(rundir,"regional.grid.a")))
+            f.write("ln -s {} .\n".format(os.path.join(rundir,"regional.grid.b")))
+            f.write("ln -s {} .\n".format(os.path.join(rundir,"ports.input")))
+            f.write("{}\n".format(topo_ports_path))
+            f.write("rm -f regional.grid.a regional.grid.b ports.input")
+
+        # Run script to check ports.input
+        if os.path.isdir(confdir):
+            os.system("cd {}; chmod 755 topo_ports.sh; ./topo_ports.sh >& {}".format(confdir,os.path.join(rundir,"topo_ports_log.txt")))
+
+###############################################################################
+def buildnml(case, caseroot, compname):
+###############################################################################
+
+    # Build the component namelist
+    if compname != "hycom":
+        raise AttributeError
+    srcroot = case.get_value("SRCROOT")
+    rundir  = case.get_value("RUNDIR")
+
+    # Determine the confdir directory
+    confdir = os.path.join(caseroot,"Buildconf","hycomconf")
+    if not os.path.isdir(confdir):
+        os.makedirs(confdir)
+
+    # Determine CaseDocs
+    casedocsdir = os.path.join(caseroot,"CaseDocs")
+
+    # Path for namelist file
+    namelist_xml_dir = os.path.join(srcroot, "src", "model", "HYCOM", "cime", "cime_config")
+
+    # Set namelist definition file
+    definition_file = os.path.join(namelist_xml_dir, "namelist_definition_hycom.xml")
+
+    # Create list of groups by querying xml file
+    groups = []
+    with open(definition_file, 'r') as fin:
+        for s in fin.xreadlines():
+            if "<group>" in s:
+                groups.append(s.replace('<group>', '').replace('</group>', '').strip())
+
+    # Remove duplicates
+    groups = list(set(groups))
+
+    # Create namelist_infile using user_nl_file as input
+    user_nl_file = os.path.join(caseroot, "user_nl_hycom")
+    expect(os.path.isfile(user_nl_file),
+           "Missing required user_nl_file %s " %(user_nl_file))
+    infile = os.path.join(confdir, "namelist_infile")
+    create_namelist_infile(case, user_nl_file, infile)
+    namelist_infile = [infile]
+
+    #--------------------------------------------
+    # Generate namelists
+    #--------------------------------------------
+
+    # Create config dictionary
+    config = {}
+
+    #--------------------------------------------
+    # blkdat.input
+    #--------------------------------------------
+
+    # Create the namelist generator object
+    nmlgen_blkdat = NamelistGenerator(case, [definition_file])
+
+    # Create blkdat namelist
+    _create_namelist(case, confdir, config, namelist_infile, nmlgen_blkdat, groups)
+
+    # Copy namelist files to rundir
+    if os.path.isdir(rundir):
+        file1 = os.path.join(confdir, "ocn_in")
+        file2 = os.path.join(rundir, "ocn_in")
+        logger.debug("Copy namelist: file1 %s file2 %s " %(file1, file2))
+        safe_copy(file1, file2)
+
+    # Link file
+    if not os.path.exists(rundir):
+        expect(False, "Couldn't find run direcory " + rundir)
+    symlink_force(file2, os.path.join(rundir, "blkdat.input"))
+
+    #--------------------------------------------
+    # nuopc.runconfig
+    #--------------------------------------------
+
+    # Create the namelist generator object
+    nmlgen_nuopc = NamelistGenerator(case, [definition_file])
+
+    # Create nuopc config
+    _create_namelist_nuopc(case, confdir, config, namelist_infile, nmlgen_nuopc)
+
+    #----------------------------------------------------
+    # Copy/link input files
+    #----------------------------------------------------
+
+    prep_input(case, nmlgen_blkdat)
+
+    #--------------------------------------------
+    # patch.input
+    #--------------------------------------------
+
+    # Create the namelist generator object
+    nmlgen_patch = NamelistGenerator(case, [definition_file])
+
+    # Create patch.input
+    _create_patch_input(case, confdir, config, rundir, namelist_infile, nmlgen_patch)
+
+    #--------------------------------------------
+    # limits
+    #--------------------------------------------
+
+    limits_file = os.path.join(confdir, "limits")
+    with open(limits_file, 'w') as f:
+        f.write("{0:.6f}".format(day1).rjust(14)+" "+"{0:.6f}".format(day2)+" false false")
+
+    # Copy namelist files to rundir
+    if os.path.isdir(rundir):
+        file1 = os.path.join(confdir, "limits")
+        file2 = os.path.join(rundir, "limits")
+        logger.debug("Copy namelist: file1 %s file2 %s " %(file1, file2))
+        safe_copy(file1, file2)
+
+    #--------------------------------------------
+    # ports.input - only check
+    #--------------------------------------------
+
+    # Create the namelist generator object
+    nmlgen_ports = NamelistGenerator(case, [definition_file])
+
+    # Create ports.input namelist
+    _create_ports_input(case, confdir, config, rundir, namelist_infile, nmlgen_ports)
+
+###############################################################################
+def _main_func():
+
+    caseroot = parse_input(sys.argv)
+    with Case(caseroot) as case:
+        buildnml(case, caseroot, "hycom")
+
+if __name__ == "__main__":
+    _main_func()

@@ -1,0 +1,7 @@
+npt_unit       = 'd'
+npt            = 2
+dumpfreq       = 'd'
+dumpfreq_n     = 2
+histfreq       = 'd','x','x','x','x'
+f_aice	       = 'd'
+

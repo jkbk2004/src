@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+
+<compsets>
+
+  <help>
+    =========================================
+    compset naming convention
+    =========================================
+    The compset longname below has the specified order
+    atm, lnd, ice, ocn, river, glc wave cesm-options
+
+    The notation for the compset longname is
+    TIME_ATM[%phys]_LND[%phys]_ICE[%phys]_OCN[%phys]_ROF[%phys]_GLC[%phys]_WAV[%phys][_BGC%phys]
+    Where for the CAM specific compsets below the following is supported
+    TIME = Time period (e.g. 2000, HIST, RCP8...)
+    ATM  = [CAM4, CAM5]
+    LND  = [CLM40, CLM45, CLM50, SLND]
+    ICE  = [CICE, DICE, SICE]
+    OCN  = [DOCN, ,AQUAP, SOCN]
+    ROF  = [RTM, SROF]
+    GLC  = [CISM1, CISM2, SGLC]
+    WAV  = [SWAV]
+    BGC  = optional BGC scenario
+
+    The OPTIONAL %phys attributes specify submodes of the given system
+    For example DOCN%DOM is the data ocean model for DOCN
+    ALL the possible %phys choices for each component are listed
+    with the -list command for create_newcase
+    ALL data models must have a %phys option that corresponds to the data  model mode
+
+    Each compset node is associated with the following elements
+    - lname
+    - alias
+    - support  (optional description of the support level for this compset)
+    Each compset node can also have the following attributes
+    - grid  (optional regular expression match for grid to work with the compset)
+  </help>
+
+  <!-- C compsets -->
+  <!-- Standalone HYCOM -->
+  <compset>
+    <alias>CHYCOM_STD</alias>
+    <lname>2000_SATM_SLND_SICE_hycom_SROF_SGLC_SWAV_SESP</lname>
+  </compset>
+
+  <!-- HYCOM with data atmosphere -->
+  <compset>
+    <alias>CHYCOM_JRA</alias>
+    <lname>2000_DATM%JRA_SLND_SICE_hycom_SROF_SGLC_SWAV_SESP</lname>
+  </compset>
+  <compset>
+    <alias>CHYCOM_NYF</alias>
+    <lname>2000_DATM%NYF_SLND_SICE_hycom_SROF_SGLC_SWAV_SESP</lname>
+  </compset>
+  <compset>
+    <alias>CHYCOM_ERA5</alias>
+    <lname>2000_DATM%ERA5_SLND_SICE_hycom_SROF_SGLC_SWAV_SESP</lname>
+  </compset>
+
+  <!-- HYCOM with data atmosphere and ice -->
+  <compset>
+    <alias>CHYCOM_JRA_DICE</alias>
+    <lname>2000_DATM%JRA_SLND_DICE%SSMI_hycom_SROF_SGLC_SWAV_SESP</lname>
+  </compset>
+  <compset>
+    <alias>CHYCOM_NYF_DICE</alias>
+    <lname>2000_DATM%NYF_SLND_DICE%SSMI_hycom_SROF_SGLC_SWAV_SESP</lname>
+  </compset>
+
+  <entries>
+    <!--- default values for HAFS app -->
+    <entry id="COUPLING_MODE">
+      <values>
+        <value>hafs</value>
+      </values>
+    </entry>
+    <entry id="ADD_AOFLUX_TO_RUNSEQ">
+      <values>
+        <value>FALSE</value>
+      </values>
+    </entry>
+    <!-- default values for Dorian case -->
+    <entry id="RUN_STARTDATE">
+      <values>
+	<value>2019-08-29</value>
+      </values>
+    </entry>
+    <entry id="START_TOD">
+      <values>
+        <value>0</value>
+      </values>
+    </entry>
+    <entry id="STOP_OPTION">
+      <values>
+        <value>nhours</value>
+      </values>
+    </entry>
+    <entry id="STOP_N">
+      <values>
+        <value>126</value>
+      </values>
+    </entry>
+    <entry id="DATM_PRESAERO">
+      <values>
+        <value>none</value>
+      </values>
+    </entry>
+  </entries>
+
+</compsets>
