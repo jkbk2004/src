@@ -14,4 +14,5 @@ jobs:
         uses: githubocto/repo-visualizer@main
         with:
           excluded_paths: "ignore,.github,.idea,source,src,DOCS"
-          max_depth: 3
+          max_depth: 4
+          excluded_globs: "**/*.{1,2}"
